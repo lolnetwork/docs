@@ -8,4 +8,5 @@ Contents:
 
    services
    iptables
+   vpn
 
