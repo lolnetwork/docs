@@ -4,17 +4,16 @@ VPN
 Quelques services ne sont accessibles qu'à travers le VPN du lolnet; Il peut
 donc etre pratique de s'y inscrire.
 
-Rien de bien compliqué si vous suivez la démarche ici. Aparemment mr Quatre me
-dit qu'il est possible de faire de differentes manières, en voici en tout cas
-une qui permet à votre pc de se connecter automatiquement au VPN du lolnet.
+Rien de bien compliqué si vous suivez la démarche ici. 
 
 Pour ça, il faut que vous ayez déjà un accès à la machine host, question de
-pouvoir copier quelques fichiers la bas. Si c'est pas le cas, vous pouvez nous
-demander de vous ajouter, c'est une histoire de déposer une clé publique
-quelque part, rien de bien sorcier.
+pouvoir copier quelques fichiers la bas.
+
+Se connecter depuis une machine linux
+=====================================
 
 Créez votre clé en local
-========================
+------------------------
 
 Alors, il faut que vous copiez quelques trucs en local, sur votre machine. Pour
 faire ça, un petit coup de scp::
@@ -28,7 +27,7 @@ Ensuite, il faut que vous génériez votre clé, en root::
     ./install.sh -t openvpn
 
 Uploader la clé et la signer
-============================
+----------------------------
 
 Normalement vous avez une clé qui est écrite sur la sortie standard. vous la
 prenez et vous la copiez collez sur le serveur, dans le fichier qui va bien,
@@ -38,19 +37,15 @@ Pour signer la clé, c'est pas bien compliqué non plus::
 
     cd /root/2.0/
     source vars
-    sign_req {machinename}
+    sign-req {machinename}
 
 Si à cette étape vous avez une erreur, c'est peut etre qu'un enregistrement
 vous concernant est déjà présent dans la base de données. Supprimez
 l'enregistrement en question dans keys/index.txt et recommencez !
 
-S'attribuer une IP
-==================
-
-XXX
 
 Récupérer la clé en local
-=========================
+-------------------------
 
 ::
 
@@ -61,10 +56,35 @@ Récupérer la clé en local
 Et voila !
 
 A plus qu'à redémarrer le service !
-===================================
+-----------------------------------
 
 ::
 
     sudo service openvpn restart
 
 
+Se connecter avec un téléphone
+==============================
+
+La procédure pour se connecter avec un téléphone est quasiment similaire, vous
+allez devoir d'abord vous connecter depuis un ordinateur, récupérer les
+fichiers qui vont bien en faisant un scp::
+
+    scp -r root@lolnet.org:/root/infra .
+
+
+D'abord, modifiez les fichiers pour changer l'HOSTNAME qui va etre utilisé et
+le PREFIX. Dans mon cas j'ai utilisé un prefixe dans `/tmp`.
+
+Ensuite, il faut que vous génériez votre clé.
+
+    cd infra
+    ./install.sh -t openvpn
+
+Le reste de la procédure est assez similaire.
+
+Ensuite, copiez les fichiers sur le téléphone, renommez le .conf en .ovpn et
+soyez bien sur de mettre les fichiers .crt et .key au meme niveau que le
+fichier .ovpn, puis changez les chemins relatifs.
+
+Ça devrait être tout !
